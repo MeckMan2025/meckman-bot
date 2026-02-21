@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meckman Bot</title>
+  <meta name="description" content="AI assistant — chat, code, images, and GIFs">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1>Meckman <span>Bot</span></h1>
+    </header>
+
+    <nav class="mode-selector">
+      <button class="mode-btn active" data-mode="chat">Chat</button>
+      <button class="mode-btn" data-mode="code">Code</button>
+      <button class="mode-btn" data-mode="image">Image</button>
+      <button class="mode-btn" data-mode="gif">GIF</button>
+    </nav>
+
+    <div class="mode-notice" id="modeNotice"></div>
+
+    <main class="chat-area" id="chatArea">
+      <div class="welcome">
+        <h2>Meckman Bot</h2>
+        <div class="divider"></div>
+        <p>AI assistant for chat, code generation, image creation, and animated GIFs. Type a message to get started.</p>
+      </div>
+    </main>
+
+    <footer class="input-area">
+      <div class="input-wrapper">
+        <textarea
+          id="promptInput"
+          placeholder="Type a message..."
+          rows="1"
+          autofocus
+        ></textarea>
+        <button class="send-btn" id="sendBtn">Send</button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

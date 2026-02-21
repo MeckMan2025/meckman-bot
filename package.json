@@ -1,0 +1,23 @@
+{
+  "name": "meckman-bot",
+  "version": "1.0.0",
+  "description": "Meckman Bot - AI assistant on Cloudflare Workers",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "Andrew Meckley",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260228.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.67.0"
+  },
+  "dependencies": {
+    "grammy": "^1.40.0"
+  }
+}

@@ -1,0 +1,22 @@
+name = "meckman-bot"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[ai]
+binding = "AI"
+
+[assets]
+directory = "./public"
+
+[vars]
+BOT_NAME = "Meckman Bot"
+
+# Secrets (set via CLI, NOT in this file):
+#   npx wrangler secret put TELEGRAM_BOT_TOKEN
+#   npx wrangler secret put TELEGRAM_WEBHOOK_SECRET
+
+# Custom domain (uncomment after initial deployment):
+# [[routes]]
+# pattern = "bot.meckman.org"
+# custom_domain = true
