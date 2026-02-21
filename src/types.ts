@@ -5,7 +5,7 @@ export interface Env {
   BOT_NAME: string;
 }
 
-export type Mode = "chat" | "code" | "image" | "gif";
+export type Mode = "chat" | "image";
 
 export interface ApiRequest {
   mode: Mode;

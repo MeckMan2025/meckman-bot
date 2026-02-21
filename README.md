@@ -2,7 +2,7 @@
 
 AI assistant running on a single Cloudflare Worker (free tier) with two interfaces:
 
-- **Public Web UI** at [bot.meckman.org](https://bot.meckman.org) — chat, code generation, image generation, and animated GIF generation
+- **Public Web UI** at [bot.meckman.org](https://bot.meckman.org) — chat and image generation
 - **Private Telegram Bot** — same AI capabilities via Telegram commands
 
 ## Stack

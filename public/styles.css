@@ -161,60 +161,11 @@ body::before {
   color: var(--gray);
 }
 
-/* Code blocks */
-.message pre {
-  background: var(--black);
-  border: 1px solid var(--tan-20);
-  border-radius: 6px;
-  padding: 12px;
-  margin-top: 8px;
-  overflow-x: auto;
-  font-size: 13px;
-  line-height: 1.5;
-  position: relative;
-}
-
-.message code {
-  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
-  font-size: 13px;
-}
-
-.copy-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: var(--charcoal);
-  color: var(--gray);
-  border: 1px solid var(--tan-20);
-  border-radius: 4px;
-  padding: 4px 10px;
-  font-size: 11px;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.copy-btn:hover {
-  color: var(--white);
-  border-color: var(--tan);
-}
-
 /* Image display */
 .message img {
   max-width: 100%;
   border-radius: 8px;
   margin-top: 8px;
-  border: 1px solid var(--tan-20);
-}
-
-/* GIF frame animation container */
-.gif-container {
-  position: relative;
-  margin-top: 8px;
-}
-
-.gif-container img {
-  max-width: 100%;
-  border-radius: 8px;
   border: 1px solid var(--tan-20);
 }
 
@@ -348,7 +299,6 @@ body::before {
   font-size: 10px;
 }
 
-/* GIF mode warning */
 .mode-notice {
   text-align: center;
   font-size: 12px;

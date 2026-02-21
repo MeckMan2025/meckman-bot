@@ -1,8 +1,6 @@
 import { Env } from "../types";
 import { handleChat } from "../handlers/chat";
-import { handleCode } from "../handlers/code";
 import { handleImage } from "../handlers/image";
-import { handleGif } from "../handlers/gif";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -48,11 +46,6 @@ export async function handleApiRequest(request: Request, env: Env): Promise<Resp
       return jsonResponse({ response });
     }
 
-    case "/api/code": {
-      const response = await handleCode(env.AI, prompt);
-      return jsonResponse({ response });
-    }
-
     case "/api/image": {
       const result = await handleImage(env.AI, prompt);
       if (!result.success) {
@@ -65,15 +58,6 @@ export async function handleApiRequest(request: Request, env: Env): Promise<Resp
           ...CORS_HEADERS,
         },
       });
-    }
-
-    case "/api/gif": {
-      const result = await handleGif(env.AI, prompt);
-      if (!result.success) {
-        return jsonResponse({ error: result.error }, 400);
-      }
-      // Return frames as JSON array of base64 strings for client-side animation
-      return jsonResponse({ frames: result.frames });
     }
 
     default:

@@ -12,16 +12,12 @@
 
   const PLACEHOLDERS = {
     chat: "Type a message...",
-    code: "Describe the code you need...",
     image: "Describe the image to generate...",
-    gif: "Describe the animation to generate...",
   };
 
   const MODE_NOTICES = {
     chat: "",
-    code: "",
     image: "",
-    gif: "GIF generation uses significantly more resources and may be limited.",
   };
 
   // Mode switching
@@ -119,9 +115,6 @@
         if (!res.ok) {
           throw new Error(data.error || "Request failed");
         }
-        if (mode === "gif") {
-          return { type: "gif", frames: data.frames };
-        }
         return { type: "text", content: data.response };
       });
     });
@@ -140,50 +133,11 @@
       img.alt = "Generated image";
       msg.appendChild(img);
       chatArea.appendChild(msg);
-    } else if (result.type === "gif") {
-      var msg = createMessageEl("bot");
-      var label = document.createElement("div");
-      label.className = "label";
-      label.textContent = "Meckman Bot";
-      msg.appendChild(label);
-
-      if (result.frames && result.frames.length > 0) {
-        var container = document.createElement("div");
-        container.className = "gif-container";
-
-        var img = document.createElement("img");
-        img.alt = "Generated animation";
-        container.appendChild(img);
-        msg.appendChild(container);
-        chatArea.appendChild(msg);
-
-        // Animate frames client-side
-        animateFrames(img, result.frames);
-      } else {
-        msg.appendChild(document.createTextNode("No frames were generated."));
-        chatArea.appendChild(msg);
-      }
     } else {
-      addBotMessage(result.content, mode === "code");
+      addBotMessage(result.content);
     }
 
     scrollToBottom();
-  }
-
-  function animateFrames(imgEl, base64Frames) {
-    var currentFrame = 0;
-    var urls = base64Frames.map(function (b64) {
-      return "data:image/png;base64," + b64;
-    });
-
-    imgEl.src = urls[0];
-
-    if (urls.length > 1) {
-      setInterval(function () {
-        currentFrame = (currentFrame + 1) % urls.length;
-        imgEl.src = urls[currentFrame];
-      }, 500);
-    }
   }
 
   function addMessage(text, type) {
@@ -194,7 +148,7 @@
     return msg;
   }
 
-  function addBotMessage(text, isCode) {
+  function addBotMessage(text) {
     var msg = createMessageEl("bot");
 
     var label = document.createElement("div");
@@ -202,45 +156,9 @@
     label.textContent = "Meckman Bot";
     msg.appendChild(label);
 
-    if (isCode) {
-      // Parse code blocks from response
-      var parts = text.split(/(```[\s\S]*?```)/g);
-      parts.forEach(function (part) {
-        if (part.startsWith("```") && part.endsWith("```")) {
-          var code = part.slice(3, -3);
-          // Remove language identifier from first line if present
-          var firstNewline = code.indexOf("\n");
-          if (firstNewline > -1 && firstNewline < 20) {
-            code = code.slice(firstNewline + 1);
-          }
-
-          var pre = document.createElement("pre");
-          var codeEl = document.createElement("code");
-          codeEl.textContent = code;
-          pre.appendChild(codeEl);
-
-          var copyBtn = document.createElement("button");
-          copyBtn.className = "copy-btn";
-          copyBtn.textContent = "Copy";
-          copyBtn.addEventListener("click", function () {
-            navigator.clipboard.writeText(code).then(function () {
-              copyBtn.textContent = "Copied";
-              setTimeout(function () { copyBtn.textContent = "Copy"; }, 2000);
-            });
-          });
-          pre.appendChild(copyBtn);
-          msg.appendChild(pre);
-        } else if (part.trim()) {
-          var p = document.createElement("p");
-          p.textContent = part;
-          msg.appendChild(p);
-        }
-      });
-    } else {
-      var content = document.createElement("div");
-      content.textContent = text;
-      msg.appendChild(content);
-    }
+    var content = document.createElement("div");
+    content.textContent = text;
+    msg.appendChild(content);
 
     chatArea.appendChild(msg);
     scrollToBottom();

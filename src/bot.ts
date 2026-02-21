@@ -1,12 +1,8 @@
 import { Bot, webhookCallback, InputFile } from "grammy";
 import { Env } from "./types";
 import { handleChat } from "./handlers/chat";
-import { handleCode } from "./handlers/code";
 import { handleImage } from "./handlers/image";
-import { handleGif } from "./handlers/gif";
 import { HELP_TEXT, WELCOME_TEXT } from "./handlers/help";
-import { sendAnimation } from "./services/telegram";
-import { framesToBase64 } from "./services/gif-encoder";
 
 export function createBot(env: Env): Bot {
   const bot = new Bot(env.TELEGRAM_BOT_TOKEN);
@@ -30,17 +26,6 @@ export function createBot(env: Env): Bot {
     await splitAndSend(ctx, response);
   });
 
-  bot.command("code", async (ctx) => {
-    const prompt = ctx.match;
-    if (!prompt) {
-      await ctx.reply("Usage: /code <describe what you need>");
-      return;
-    }
-    await ctx.api.sendChatAction(ctx.chat.id, "typing");
-    const response = await handleCode(env.AI, prompt);
-    await splitAndSend(ctx, response);
-  });
-
   bot.command("image", async (ctx) => {
     const prompt = ctx.match;
     if (!prompt) {
@@ -55,27 +40,6 @@ export function createBot(env: Env): Bot {
     }
     await ctx.replyWithPhoto(new InputFile(result.data, "image.png"), {
       caption: prompt,
-    });
-  });
-
-  bot.command("gif", async (ctx) => {
-    const prompt = ctx.match;
-    if (!prompt) {
-      await ctx.reply("Usage: /gif <describe the animation>");
-      return;
-    }
-    await ctx.api.sendChatAction(ctx.chat.id, "upload_video");
-    const result = await handleGif(env.AI, prompt);
-    if (!result.success || !result.frames) {
-      await ctx.reply(result.error ?? "Failed to generate GIF.");
-      return;
-    }
-
-    // For Telegram, send the first frame as a photo since true GIF encoding
-    // requires pixel-level access. The web UI handles multi-frame animation.
-    const firstFrame = Uint8Array.from(atob(result.frames[0]), (c) => c.charCodeAt(0));
-    await ctx.replyWithPhoto(new InputFile(firstFrame, "animation.png"), {
-      caption: `${prompt} (${result.frames.length} frames generated — full animation available on bot.meckman.org)`,
     });
   });
 
