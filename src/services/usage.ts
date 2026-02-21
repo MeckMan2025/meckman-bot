@@ -10,9 +10,8 @@ const DAILY_NEURON_LIMIT = 10_000;
 // Estimated neuron costs per operation
 export const NEURON_COSTS = {
   chat: 500,
-  code: 500,
   image: 4000,
-  gif: 16000, // 4 frames × 4000
+  imageScreen: 500,
 } as const;
 
 function getTodayKey(): string {

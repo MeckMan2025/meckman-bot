@@ -1,4 +1,4 @@
-import { filterImageInput } from "../services/content-filter";
+import { filterImageInput, aiScreenImagePrompt } from "../services/content-filter";
 import { checkBudget, recordUsage, NEURON_COSTS } from "../services/usage";
 import { generateImage } from "../services/ai";
 
@@ -6,18 +6,27 @@ export async function handleImage(
   ai: Ai,
   prompt: string
 ): Promise<{ success: boolean; data?: Uint8Array; error?: string }> {
-  // Layer 1: Input filter (stricter for images)
+  // Layer 1: Regex input filter (stricter for images)
   const filterResult = filterImageInput(prompt);
   if (!filterResult.safe) {
     return { success: false, error: filterResult.message };
   }
 
-  // Layer 2: Budget check
-  const budget = checkBudget(NEURON_COSTS.image);
+  // Layer 2: Budget check (screening + image generation combined)
+  const totalCost = NEURON_COSTS.imageScreen + NEURON_COSTS.image;
+  const budget = checkBudget(totalCost);
   if (!budget.allowed) {
     return { success: false, error: budget.message };
   }
 
+  // Layer 3: AI content screening
+  const screenResult = await aiScreenImagePrompt(ai, prompt);
+  recordUsage(NEURON_COSTS.imageScreen);
+  if (!screenResult.safe) {
+    return { success: false, error: screenResult.message };
+  }
+
+  // Layer 4: Generate image
   try {
     const imageBytes = await generateImage(ai, prompt);
     recordUsage(NEURON_COSTS.image);
