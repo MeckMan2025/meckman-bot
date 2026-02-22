@@ -1,4 +1,4 @@
-import { filterImageInput, aiScreenImagePrompt } from "../services/content-filter";
+import { filterImageInput, aiScreenPrompt } from "../services/content-filter";
 import { checkBudget, recordUsage, NEURON_COSTS } from "../services/usage";
 import { generateImage } from "../services/ai";
 
@@ -20,7 +20,7 @@ export async function handleImage(
   }
 
   // Layer 3: AI content screening
-  const screenResult = await aiScreenImagePrompt(ai, prompt);
+  const screenResult = await aiScreenPrompt(ai, prompt);
   recordUsage(NEURON_COSTS.imageScreen);
   if (!screenResult.safe) {
     return { success: false, error: screenResult.message };

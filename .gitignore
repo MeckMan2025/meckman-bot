@@ -3,5 +3,6 @@ dist/
 pages-dist/
 .dev.vars
 .wrangler/
+.claude/
 *.log
 .DS_Store

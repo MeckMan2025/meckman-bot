@@ -1,0 +1,30 @@
+MECKMAN BOT - SECURITY UPDATE PLAN
+====================================
+Date: 2026-02-22
+
+CRITICAL (Immediate)
+--------------------
+[x] 1. Add .claude/ to .gitignore
+[x] 2. Remove hardcoded credentials from .claude/settings.local.json
+[x] 3. Remind user to rotate Cloudflare API token, Telegram bot token, and webhook secret
+
+HIGH PRIORITY (Code Changes)
+-----------------------------
+[x] 4. Lock CORS to https://bot.meckman.org only
+[x] 5. Add input length validation (max 2000 chars) on API + Telegram handlers
+[x] 6. Add request body size limit on API endpoints
+[x] 7. Change AI content screener to fail-closed (reject on error instead of allowing)
+[x] 8. Harden AI screener prompt against prompt injection
+[x] 9. Add AI content screening to chat handler (not just images)
+[x] 10. Add per-user rate limiting on Telegram bot (in-memory cooldown)
+
+MEDIUM PRIORITY (Hardening)
+----------------------------
+[x] 11. Add security headers to all responses (CSP, X-Frame-Options, HSTS, etc.)
+[x] 12. Add Content-Security-Policy meta tag to index.html
+[x] 13. Sanitize error logging (no raw error objects)
+[x] 14. Add basic schema validation on Telegram webhook JSON
+
+DEPLOY
+------
+[x] 15. Deploy updated worker to Cloudflare

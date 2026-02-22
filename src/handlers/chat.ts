@@ -1,18 +1,26 @@
-import { filterTextInput } from "../services/content-filter";
+import { filterTextInput, aiScreenPrompt } from "../services/content-filter";
 import { checkBudget, recordUsage, NEURON_COSTS } from "../services/usage";
 import { generateChat } from "../services/ai";
 
 export async function handleChat(ai: Ai, prompt: string): Promise<string> {
-  // Layer 1: Input filter
+  // Layer 1: Regex input filter
   const filterResult = filterTextInput(prompt);
   if (!filterResult.safe) {
     return filterResult.message!;
   }
 
-  // Layer 2: Budget check
-  const budget = checkBudget(NEURON_COSTS.chat);
+  // Layer 2: Budget check (screening + chat)
+  const totalCost = NEURON_COSTS.chatScreen + NEURON_COSTS.chat;
+  const budget = checkBudget(totalCost);
   if (!budget.allowed) {
     return budget.message!;
+  }
+
+  // Layer 3: AI content screening
+  const screenResult = await aiScreenPrompt(ai, prompt);
+  recordUsage(NEURON_COSTS.chatScreen);
+  if (!screenResult.safe) {
+    return screenResult.message!;
   }
 
   try {
